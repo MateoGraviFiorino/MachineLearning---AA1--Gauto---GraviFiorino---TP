@@ -1,4 +1,8 @@
-#Funciones para convertir el input en una entrada valida para el modelo
+import joblib
+
+scaler = joblib.load('escalador.joblib')
+#Funciones
+
 def oneHotLocation(df):
     if df.Location.values == 'Adelaide':
         df['Location_Canberra'] = 0, 
@@ -950,16 +954,18 @@ def oneHotSeason(df):
         df = df.drop(['Season'], axis = 1)
         return df
 
-def adecuar(data:dict):
+def adecuar(data:dict, scaler):
     import pandas as pd
     import numpy as np
-    from sklearn.preprocessing import StandardScaler
+    #from sklearn.preprocessing import StandardScaler
 
     df = pd.DataFrame(data)
 
     df_encoded = oneHotSeason(oneHotWindDir3pm(oneHotWindDir9am(oneHotRainToday(oneHotWindGustDir(oneHotLocation(df))))))
-    scaler = StandardScaler()
-    scaler.fit(df_encoded)
+    #scaler = StandardScaler()
+    #scaler.fit(df_encoded)
     df_scaled = scaler.transform(df_encoded)
 
     return df_scaled
+
+#--------------
